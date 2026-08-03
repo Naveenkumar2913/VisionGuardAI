@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual Environment
+venv/
+
+# YOLO Model
+*.pt
+
+# VS Code
+.vscode/
+
+# Screenshots
+backend/screenshots/
+
+# Logs
+backend/logs/
+
+# OS Files
+.DS_Store
+Thumbs.db
