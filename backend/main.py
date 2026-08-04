@@ -1,10 +1,8 @@
 from ultralytics import YOLO
 import cv2
 
-from ultralytics import YOLO
-import cv2
-
-from zone import draw_zone,inside_zone
+from app.zone import draw_zone,inside_zone
+from app.logger import save_event
 
 # Load the pretrained YOLO model
 model = YOLO("yolov8n.pt")
@@ -35,10 +33,14 @@ while True:
 
     boxes = results[0].boxes
 
-    if boxes is not None:
-      for box in boxes:
+    for box in boxes:
 
-        x1,y1,x2,y2 = box.xyxy[0]
+     track_id = -1
+
+    if box.id is not None:
+        track_id = int(box.id.item())
+
+        x1, y1, x2, y2 = box.xyxy[0]
 
         x1=int(x1)
         y1=int(y1)
@@ -48,7 +50,18 @@ while True:
         foot=( (x1+x2)//2 , (y1+y2)//2 )
 
     if inside_zone(foot):
-            cv2.putText(annotated_frame,"ALERT!",(50,50),cv2.FONT_HERSHEY_SIMPLEX,1,(0,0,255),3 )
+
+     save_event(track_id)
+
+    cv2.putText(
+        annotated_frame,
+        "ALERT!",
+        (50, 50),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1,
+        (0, 0, 255),
+        3
+        )
 
     draw_zone(annotated_frame)
 
